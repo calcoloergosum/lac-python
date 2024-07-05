@@ -4,13 +4,11 @@ This repository has two implementations.
 
 - `lca.naive::build`:
   - naive and simplest approach
-  - $O(n)$ preprocessing time
-  - $O(n)$ preprocessing space
+  - $O(n)$ preprocessing time & space
   - $O(\log n)$ query time
 
 - `lca.constant_time_linear_space::build`:
-  - $O(n)$ preprocessing time
-  - $O(n)$ preprocessing space
+  - $O(n)$ preprocessing time & space
   - $O(1)$ query time
   - Based on [Wikipedia Article on Lowest common ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor). The article has a comprehensive overview on the topic.
 
