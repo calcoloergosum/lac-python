@@ -1,0 +1,1 @@
+VERY_BIG_NUMBER = 10 ** 7
