@@ -6,10 +6,13 @@ import pytest
 import lca.constant_time_linear_space as mod
 import lca.naive
 
+
+# Nested tuple as tree
 T = ((('a', 'b'), ('c',)), ('d', ('e', 'f')))
 
 
 def v2vs(v):
+    """Children iterator for nested tuple"""
     return v if isinstance(v, tuple) else ()
 
 
@@ -96,14 +99,8 @@ def test_tree_generation():
         assert depth2maxlabel.get(depth, 0) < data
     dfs(tree, func)
 
-def tree_fold(tree, ternary_op, val):
-    if tree is None:
-        return val
-    *_, l, r = tree
-    return ternary_op(tree_fold(l), tree_fold(r), val)
 
-
-def choose_random(tree):
+def choose_random_subtree(tree):
     if tree is None:
         raise RuntimeError
     assert len(tree) == 5
@@ -111,9 +108,9 @@ def choose_random(tree):
     n = n_l + n_r + 1
     x = random.random()
     if x < n_l / n:
-        return choose_random(l)
+        return choose_random_subtree(l)
     if x < (n_l + n_r) / n:
-        return choose_random(r)
+        return choose_random_subtree(r)
     return tree
 
 
@@ -164,6 +161,6 @@ def test_random_binary_tree(tree, v1, v2):
         _test(v1, v2)
 
     for _ in range(100):
-        v1 = choose_random(tree)
-        v2 = choose_random(tree)
+        v1 = choose_random_subtree(tree)
+        v2 = choose_random_subtree(tree)
         _test(v1, v2)
