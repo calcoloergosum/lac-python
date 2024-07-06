@@ -1,6 +1,11 @@
+"""Naive lowest common ancestor by dfs labelling.
+
+preprocessing: O(n)
+query:         O(log n)
+"""
 from typing import Callable, Iterable, TypeVar
 
-from .protocol import Hashable
+from ..protocol import Hashable
 
 V = TypeVar("V")
 

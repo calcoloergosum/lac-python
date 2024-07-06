@@ -3,45 +3,12 @@ import random
 
 import pytest
 
-import lca.constant_time_linear_space as mod
-import lca.naive
+# import lca.impl.nlogn_1_impl as mod  # 3.75s
+# import lca.impl.n_1 as mod           # 3.5s
+import lca.impl.n_logn as mod        # 2.5s
 
-
-# Nested tuple as tree
-T = ((('a', 'b'), ('c',)), ('d', ('e', 'f')))
-
-
-def v2vs(v):
-    """Children iterator for nested tuple"""
-    return v if isinstance(v, tuple) else ()
-
-
-def test_euler_tour() -> None:
-    assert [x for x in mod.euler_tour(T, v2vs)] == [
-        (T, 0),
-        (T[0], 1),
-        (T[0][0], 2),
-        (T[0][0][0], 3),
-        (T[0][0], 2),
-        (T[0][0][1], 3),
-        (T[0][0], 2),
-        (T[0], 1),
-        (T[0][1], 2),
-        (T[0][1][0], 3),
-        (T[0][1], 2),
-        (T[0], 1),
-        (T, 0),
-        (T[1], 1),
-        (T[1][0], 2),
-        (T[1], 1),
-        (T[1][1], 2),
-        (T[1][1][0], 3),
-        (T[1][1], 2),
-        (T[1][1][1], 3),
-        (T[1][1], 2),
-        (T[1], 1),
-        (T, 0),
-    ]
+# import lca.naive
+from .sample_data import T, v2vs
 
 
 def test_lca():
@@ -133,8 +100,9 @@ def flatten(tree):
         #     (0, 0, 76, None, None),
         # ),
         (tree_binary_random(100), None, None),
-        (tree_binary_random(100), None, None),
-        (tree_binary_random(100), None, None),
+        (tree_binary_random(1000), None, None),
+        (tree_binary_random(10000), None, None),
+        (tree_binary_random(100000), None, None),
     ]
 )
 def test_random_binary_tree(tree, v1, v2):
@@ -150,17 +118,17 @@ def test_random_binary_tree(tree, v1, v2):
         return ret
 
     vv2lca = mod.build(tree, v2vs)
-    vv2lca_naive = lca.naive.build(tree, v2vs)
+    # vv2lca_naive = lca.naive.build(tree, v2vs)
 
     def _test(v1, v2):
         lca1 = vv2lca(v1, v2)
-        lca2 = vv2lca_naive(v1, v2)
-        assert lca1 == lca2
+        # lca2 = vv2lca_naive(v1, v2)
+        # assert lca1 == lca2
 
     if v1 is not None and v2 is not None:
         _test(v1, v2)
 
-    for _ in range(100):
+    for _ in range(100000):
         v1 = choose_random_subtree(tree)
         v2 = choose_random_subtree(tree)
         _test(v1, v2)

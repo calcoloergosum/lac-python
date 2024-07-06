@@ -1,24 +1,20 @@
+"""Fancy lowest common ancestor by dfs labelling.
+
+preprocessing: O(n)
+query:         O(1)
+"""
 import itertools
 import math
-from typing import Callable, Iterable, Tuple, TypeVar
+from typing import Callable, Iterable, TypeVar
 
-from . import range_minimum_query as rmq
-from .constants import VERY_BIG_NUMBER
-from .protocol import Hashable
+from .. import range_minimum_query as rmq
+from ..constants import VERY_BIG_NUMBER
+from ..protocol import Hashable
+from ..graphutil import euler_tour
+
 
 V = TypeVar("V")
 Depth = int
-
-
-def euler_tour(
-    root: V,
-    v2vs: Callable[[V], Iterable[V]],
-    depth_init: int = 0,
-) -> Iterable[Tuple[V, Depth]]:
-    yield root, depth_init
-    for v in v2vs(root):
-        yield from euler_tour(v, v2vs, depth_init + 1)
-        yield root, depth_init
 
 
 def build(
@@ -100,7 +96,7 @@ def build(
     # inside block done
 
     def lca_tt2t(t1: int, t2: int) -> int:
-        """LCA function with vertex interface"""
+        """LCA function with time interface"""
         nonlocal t2d, t2b, b2tmin, b2tmin_prefix, b2tmin_suffix, bb2b
         t1, t2 = min(t1, t2), max(t1, t2)
         b1, b2 = t2b[t1], t2b[t2]
@@ -114,8 +110,8 @@ def build(
 
         d, t = min((t2d[t1], t1), (t2d[t2], t2))
         if b1 + 1 < b2:
-            t_12 = b2tmin[bb2b(b1 + 1, b2)]
-            d, t = min((d, t), (t2d[t_12], t_12))
+            b_12, d_12 = bb2b(b1 + 1, b2)
+            d, t = min((d, t), (d_12, b2tmin[b_12]))
         return t
 
     def lca_vv2v(v1: Hashable[V], v2: Hashable[V]) -> V:
