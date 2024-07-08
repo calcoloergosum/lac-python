@@ -46,6 +46,10 @@ assert lca(T[0][0], T[1][1][1]) == T
 assert lca(T[1][0], T[1][1][1]) == T[1]
 ```
 
+## Benchmark
+
+![benchmark.png](benchmark.png)
+
 ## Note
 
 - [a very neat implementation (C++)](https://github.com/leduythuccs/LCA-Algorithms/) comparing speed by [@leduythuccs](https://github.com/leduythuccs). O(1) Initiation has significant impact on query time, even up to 4M nodes.

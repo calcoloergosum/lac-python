@@ -81,9 +81,13 @@ def build(
     bb2b = rmq.build([t2d[t] for t in b2tmin])
 
     # inside block
-    b2tt2tmin = [[None for _ in ds] for ds in b2ds]
-    for b, ds in enumerate(b2ds):
+    ds2tt2tmin = {}  # Genius depth caching
+    for ds in b2ds:
         n_d = len(ds)
+        k = tuple(ds)
+        if k in ds2tt2tmin:
+            continue
+
         tt2tmin = [
             [
                 min(range(t1, t2 + 1), key=lambda t: ds[t])
@@ -92,7 +96,7 @@ def build(
             ]
             for t1 in range(n_d)
         ]
-        b2tt2tmin[b] = tt2tmin
+        ds2tt2tmin[k] = tt2tmin
     # inside block done
 
     def lca_tt2t(t1: int, t2: int) -> int:
@@ -102,7 +106,7 @@ def build(
         b1, b2 = t2b[t1], t2b[t2]
         if b1 == b2:
             _t = b2t[b1]
-            t = b2tt2tmin[b1][t1 - _t][t2 - _t] + _t
+            t = ds2tt2tmin[tuple(b2ds[b1])][t1 - _t][t2 - _t] + _t
             return t
 
         t1 = b2tmin_suffix[b1][t1 - b2t[b1]]
